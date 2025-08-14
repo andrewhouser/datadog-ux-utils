@@ -18,9 +18,14 @@
     "README.md",
     "LICENSE"
   ],
-  "repository": {},
-  "homepage": "",
-  "bug": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andrewhouser/datadog-ux-utils.git"
+  },
+  "homepage": "https://github.com/andrewhouser/datadog-ux-utils#readme",
+  "bugs": {
+    "url": "https://github.com/andrewhouser/datadog-ux-utils/issues"
+  },
   "scripts": {
     "build": "vite build",
     "test": "vitest run",
@@ -35,15 +40,18 @@
     "docs:dev": "typedoc --skipErrorChecking --watch --preserveWatchOutput"
   },
   "keywords": [
-    "datadog-utils",
-    "ux-performance",
-    "helpers",
-    "javascript",
-    "js-utils",
+    "datadog",
+    "datadog-rum",
+    "performance",
+    "ux",
+    "monitoring",
+    "telemetry",
+    "web-vitals",
+    "react",
+    "circuit-breaker",
+    "retry",
+    "rate-limit",
     "typescript",
-    "utilities",
-    "utils",
-    "dom-utils",
     "tree-shakeable",
     "esm",
     "commonjs"
@@ -53,6 +61,7 @@
     "email": "houserdesign@gmail.com"
   },
   "license": "MIT",
+  "sideEffects": false,
   "engines": {
     "node": ">=16.0.0"
   },
