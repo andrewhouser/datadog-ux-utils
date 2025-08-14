@@ -1,0 +1,84 @@
+{
+  "name": "datadog-ux-utils",
+  "version": "1.0.0",
+  "description": "A collection of utility functions and React components to enhance web performance monitoring and user experience analytics with Datadog. Includes helpers for resource tracking, error boundaries, web vitals, and more. Built with TypeScript, supports both ESM and CommonJS, and integrates seamlessly with Datadog RUM and Logs.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {},
+  "homepage": "",
+  "bug": "",
+  "scripts": {
+    "build": "vite build",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "prepublishOnly": "npm run typecheck && npm run test && npm run build && npm run docs",
+    "docs": "typedoc --skipErrorChecking",
+    "docs:serve": "typedoc --skipErrorChecking --watch",
+    "docs:dev": "typedoc --skipErrorChecking --watch --preserveWatchOutput"
+  },
+  "keywords": [
+    "datadog-utils",
+    "ux-performance",
+    "helpers",
+    "javascript",
+    "js-utils",
+    "typescript",
+    "utilities",
+    "utils",
+    "dom-utils",
+    "tree-shakeable",
+    "esm",
+    "commonjs"
+  ],
+  "author": {
+    "name": "Andrew Houser",
+    "email": "houserdesign@gmail.com"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "dependencies": {
+    "@datadog/browser-logs": "^6.18.0",
+    "@datadog/browser-rum": "^6.18.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "web-vitals": "^5.1.0"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
+    "@types/jsdom": "^21.1.7",
+    "@types/node": "^24.2.1",
+    "@types/react-dom": "^19.1.7",
+    "@types/react": "^19.1.10",
+    "@typescript-eslint/eslint-plugin": "^7.1.0",
+    "@typescript-eslint/parser": "^7.1.0",
+    "@vitest/coverage-v8": "^1.5.0",
+    "eslint": "^8.57.0",
+    "jsdom": "^26.1.0",
+    "typedoc-plugin-markdown": "^4.0.3",
+    "typedoc": "^0.28.10",
+    "typescript": "^5.3.3",
+    "vite-plugin-dts": "^3.9.1",
+    "vite": "^5.1.4",
+    "vitest": "^1.5.0"
+  }
+}
