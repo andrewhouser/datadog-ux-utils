@@ -76,7 +76,7 @@ export const timePromise = async <T>(
   }
 };
 
-const maybeAction = (
+export const maybeAction = (
   name: string,
   attrs: Record<string, unknown>,
   rate: number
@@ -84,6 +84,6 @@ const maybeAction = (
   if (Math.random() * 100 < rate) datadogRum.addAction(name, attrs);
 };
 
-const maybeError = (err: unknown, ctx?: Record<string, unknown>) => {
+export const maybeError = (err: unknown, ctx?: Record<string, unknown>) => {
   datadogRum.addError(err as Error, ctx);
 };

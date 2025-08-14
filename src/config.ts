@@ -59,7 +59,27 @@ export function initDatadogUx(cfg: UxConfig) {
  * Gets the current UX configuration.
  * @returns The resolved configuration object.
  */
-export const getUxConfig = () => _config;
+export const getUxConfig = () => {
+  if (!_config) {
+    // minimal default for tests / uninitialized usage
+    _config = {
+      actionSampleRate: 100,
+      apiLargeKb: 200,
+      apiSlowMs: 0,
+      captureLongTasks: false,
+      captureResponseSize: true,
+      captureWebVitals: false,
+      env: "test",
+      errorSampleRate: 100,
+      onRouteChange: () => {},
+      renderSlowMs: 50,
+      service: "test",
+      version: "0.0.0",
+      appName: "test",
+    } as any;
+  }
+  return _config;
+};
 /**
  * Updates the current UX configuration with new values.
  * @param p - Partial configuration to merge.
@@ -67,3 +87,8 @@ export const getUxConfig = () => _config;
  */
 export const setUxConfig = (p: Partial<UxConfig>) =>
   (_config = { ..._config, ...p });
+
+// Test-only helper (not exported in package exports) to prime config without full init
+export const __setUxTestConfig = (c: Partial<UxConfig>) => {
+  _config = { ...(_config as any), ...c };
+};
