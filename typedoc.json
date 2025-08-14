@@ -1,7 +1,9 @@
 {
   "$schema": "https://typedoc.org/schema.json",
   "name": "datadog-ux-utils Documentation",
-  "entryPoints": ["./src/index.ts"],
+  // Expand every file under src so module pages reflect folder structure
+  "entryPoints": ["./src"],
+  "entryPointStrategy": "expand",
   "out": "./docs",
   "theme": "default",
   "includeVersion": true,
