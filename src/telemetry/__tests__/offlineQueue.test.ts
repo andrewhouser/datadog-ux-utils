@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { installTelemetryQueue } from "../offlineQueue";
+import { installTelemetryQueue } from "../offlineQueue.ts";
 
 // Provide a controllable online flag
 Object.defineProperty(window.navigator, "onLine", {

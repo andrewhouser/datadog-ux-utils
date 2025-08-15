@@ -6,8 +6,8 @@
  * which impact user experience.
  */
 
-import { safeAddAction } from "../datadog";
-import { LayoutShiftOptions } from "../types/types";
+import { safeAddAction } from "../datadog.ts";
+import { LayoutShiftOptions } from "../types/types.ts";
 
 let _clsValue = 0;
 let _observer: PerformanceObserver | null = null;

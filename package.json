@@ -1,7 +1,7 @@
 {
   "name": "datadog-ux-utils",
   "version": "1.0.0",
-  "description": "A collection of utility functions and React components to enhance web performance monitoring and user experience analytics with Datadog. Includes helpers for resource tracking, error boundaries, web vitals, and more. Built with TypeScript, supports both ESM and CommonJS, and integrates seamlessly with Datadog RUM and Logs.",
+  "description": "Datadog RUM focused UX & performance toolkit: API guards (retry, breaker, rate), React telemetry (error boundary, profiler, Suspense), web vitals & resource observers, offline queues.",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -11,6 +11,41 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
+    },
+    "./react": {
+      "types": "./dist/react/index.d.ts",
+      "import": "./dist/react.mjs",
+      "require": "./dist/react.js"
+    },
+    "./perf": {
+      "types": "./dist/perf/index.d.ts",
+      "import": "./dist/perf.mjs",
+      "require": "./dist/perf.js"
+    },
+    "./api": {
+      "types": "./dist/api/index.d.ts",
+      "import": "./dist/api.mjs",
+      "require": "./dist/api.js"
+    },
+    "./env": {
+      "types": "./dist/env/index.d.ts",
+      "import": "./dist/env.mjs",
+      "require": "./dist/env.js"
+    },
+    "./errors": {
+      "types": "./dist/errors/index.d.ts",
+      "import": "./dist/errors.mjs",
+      "require": "./dist/errors.js"
+    },
+    "./telemetry": {
+      "types": "./dist/telemetry/index.d.ts",
+      "import": "./dist/telemetry.mjs",
+      "require": "./dist/telemetry.js"
+    },
+    "./ux": {
+      "types": "./dist/ux/index.d.ts",
+      "import": "./dist/ux.mjs",
+      "require": "./dist/ux.js"
     }
   },
   "files": [
@@ -28,8 +63,8 @@
   },
   "scripts": {
     "build": "vite build",
-    "test": "vitest run",
-    "test:coverage": "vitest run --coverage",
+    "test": "vitest run --coverage --coverage.threshold.lines=80 --coverage.threshold.functions=75 --coverage.threshold.branches=65 --coverage.threshold.statements=80",
+    "test:coverage": "vitest run --coverage --coverage.threshold.lines=80 --coverage.threshold.functions=75 --coverage.threshold.branches=65 --coverage.threshold.statements=80",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src/**/*.ts",
@@ -37,8 +72,57 @@
     "prepublishOnly": "npm run typecheck && npm run test && npm run build && npm run docs",
     "docs": "typedoc --skipErrorChecking",
     "docs:serve": "typedoc --skipErrorChecking --watch",
-    "docs:dev": "typedoc --skipErrorChecking --watch --preserveWatchOutput"
+    "docs:dev": "typedoc --skipErrorChecking --watch --preserveWatchOutput",
+    "size": "size-limit",
+    "analyze": "size-limit --why",
+    "release": "semantic-release"
   },
+  "size-limit": [
+    {
+      "path": "dist/index.mjs",
+      "limit": "20 KB"
+    },
+    {
+      "path": "dist/react.mjs",
+      "limit": "6 KB"
+    },
+    {
+      "path": "dist/perf.mjs",
+      "limit": "10 KB"
+    },
+    {
+      "path": "dist/api.mjs",
+      "limit": "8 KB"
+    },
+    {
+      "path": "dist/errors.mjs",
+      "limit": "6 KB"
+    },
+    {
+      "path": "dist/telemetry.mjs",
+      "limit": "6 KB"
+    },
+    {
+      "path": "dist/ux.mjs",
+      "limit": "6 KB"
+    },
+    {
+      "path": "./size-limit/only-ddFetch.js",
+      "limit": "3 KB"
+    },
+    {
+      "path": "./size-limit/only-registerWebVitals.js",
+      "limit": "4 KB"
+    },
+    {
+      "path": "./size-limit/only-ErrorBoundary.js",
+      "limit": "4 KB"
+    },
+    {
+      "path": "./size-limit/only-componentTelemetry.js",
+      "limit": "2 KB"
+    }
+  ],
   "keywords": [
     "datadog",
     "datadog-rum",
@@ -65,12 +149,24 @@
   "engines": {
     "node": ">=16.0.0"
   },
-  "dependencies": {
-    "@datadog/browser-logs": "^6.18.0",
-    "@datadog/browser-rum": "^6.18.0",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
-    "web-vitals": "^5.1.0"
+  "dependencies": {},
+  "peerDependencies": {
+    "react": ">=18 <21",
+    "react-dom": ">=18 <21",
+    "@datadog/browser-rum": ">=6.0.0",
+    "@datadog/browser-logs": ">=6.0.0",
+    "web-vitals": ">=3 <6"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    },
+    "web-vitals": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.6.3",
@@ -89,6 +185,18 @@
     "typescript": "^5.3.3",
     "vite-plugin-dts": "^3.9.1",
     "vite": "^5.1.4",
-    "vitest": "^1.5.0"
+    "vitest": "^1.5.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "@datadog/browser-rum": "^6.18.0",
+    "@datadog/browser-logs": "^6.18.0",
+    "web-vitals": "^5.1.0",
+    "size-limit": "^11.1.4",
+    "@size-limit/preset-small-lib": "^11.1.4",
+    "semantic-release": "^23.0.0",
+    "@semantic-release/changelog": "^6.0.0",
+    "@semantic-release/git": "^10.0.0",
+    "@semantic-release/github": "^10.0.0",
+    "@semantic-release/npm": "^11.0.0"
   }
 }

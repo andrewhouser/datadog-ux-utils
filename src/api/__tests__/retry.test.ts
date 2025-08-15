@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { retry } from "../retry";
+import { retry } from "../retry.ts";
 
 vi.mock("../datadog", () => ({ addAction: vi.fn(), addError: vi.fn() }));
 

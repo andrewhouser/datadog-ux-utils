@@ -1,4 +1,8 @@
-import { addAction, addError } from "../datadog";
+/**
+ * @file flowTimer.ts
+ * @description Tracks user flows and timing for analytics and diagnostics, reporting start, end, and error events to telemetry.
+ */
+import { addAction, addError } from "../datadog.ts";
 
 /**
  * Internal representation of a flow timer instance.

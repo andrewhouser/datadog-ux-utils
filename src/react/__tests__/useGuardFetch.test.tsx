@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { renderHook, act } from "@testing-library/react";
-import { useGuardedFetch } from "../useGuardFetch";
+import { useGuardedFetch } from "../useGuardFetch.ts";
 
 describe("useGuardedFetch", () => {
   it("delegates to guard.guardFetch", async () => {

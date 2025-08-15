@@ -1,4 +1,8 @@
-import { getUxConfig } from "../config";
+/**
+ * @file responseSize.ts
+ * @description Monitors and checks the size of API responses to prevent large payloads and report them to Datadog RUM.
+ */
+import { getUxConfig } from "../config.ts";
 import { datadogRum } from "@datadog/browser-rum";
 
 /**

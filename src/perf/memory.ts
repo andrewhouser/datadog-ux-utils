@@ -4,8 +4,8 @@
  * `performance.memory` API (Chrome-only), with optional Datadog reporting.
  */
 
-import { safeAddAction } from "../datadog";
-import { MemoryMetrics, MemoryTrackingOptions } from "../types/types";
+import { safeAddAction } from "../datadog.ts";
+import { MemoryMetrics, MemoryTrackingOptions } from "../types/types.ts";
 
 let _timer: number | null = null;
 let _opts: Required<MemoryTrackingOptions>;

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, vi, afterEach } from "vitest";
 
 // Mocks for datadog helpers used by network.ts
 const addActionMock = vi.fn();
@@ -31,7 +31,7 @@ async function importFresh(connection?: any) {
   } else {
     delete (navigator as any).connection;
   }
-  return await import("../network");
+  return await import("../network.ts");
 }
 
 describe("network env utilities", () => {

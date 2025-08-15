@@ -1,2 +1,2 @@
-export * from "./consoleCapture";
-export * from "./resourceErrors";
+export * from "./consoleCapture.ts";
+export * from "./resourceErrors.ts";

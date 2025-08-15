@@ -1,9 +1,10 @@
-// Buffers telemetry events (actions/errors) while offline, persists to localStorage,
-// and flushes when connectivity returns. Designed to cooperate with your datadog.ts
-// via two global hooks set by this module.
-//
-// Usage (after initDatadog):
-//   installPersistentTelemetryQueue({ maxBuffered: 500, storageKey: 'dd_offline_v1' });
+/**
+ * @file offlineQueue.persistent.ts
+ * @description Buffers telemetry events while offline, persists to localStorage, and flushes when connectivity returns. Designed to cooperate with your datadog.ts via two global hooks set by this module.
+ *
+ * Usage (after initDatadog):
+ *   installPersistentTelemetryQueue({ maxBuffered: 500, storageKey: 'dd_offline_v1' });
+ */
 
 type QueuedAction = {
   t: "a"; // action
@@ -23,7 +24,7 @@ type QueuedError = {
 
 type QueuedEvent = QueuedAction | QueuedError;
 
-import { PersistentQueueOptions } from "../types/types";
+import { PersistentQueueOptions } from "../types/types.ts";
 
 const DEFAULTS: Required<PersistentQueueOptions> = {
   storageKey: "dd_offline_queue_v1",
@@ -59,8 +60,26 @@ function getSenders(): { sendAction?: SendAction; sendError?: SendError } {
 }
 
 /**
- * Install the persistent offline queue. Safe to call multiple times.
- * Returns an uninstall function.
+ * Installs the persistent offline telemetry queue.
+ *
+ * Buffers telemetry events (actions/errors) while offline, persists to localStorage, and flushes when connectivity returns.
+ * Safe to call multiple times. Returns an uninstall function.
+ *
+ * @param opts - Persistent queue configuration (see {@link PersistentQueueOptions}).
+ * @returns Uninstall function to remove listeners and hooks.
+ *
+ * @example
+ * ```ts
+ * import { installPersistentTelemetryQueue } from "datadog-ux-utils/telemetry";
+ *
+ * installPersistentTelemetryQueue({
+ *   maxBuffered: 600,
+ *   storageKey: "dd_offline_queue_v1",
+ *   byteCap: 2_000_000,
+ *   flushOnInit: true,
+ *   writeDebounceMs: 120,
+ * });
+ * ```
  */
 export function installPersistentTelemetryQueue(
   opts: PersistentQueueOptions = {}
@@ -88,7 +107,11 @@ export function installPersistentTelemetryQueue(
   return uninstall;
 }
 
-/** Uninstall and remove listeners; leaves stored events intact. */
+/**
+ * Uninstalls the persistent telemetry queue and removes listeners/hooks. Leaves stored events intact in localStorage.
+ *
+ * @returns void
+ */
 function uninstall() {
   if (!installed) return;
   installed = false;

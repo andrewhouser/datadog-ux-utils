@@ -1,5 +1,9 @@
-import { addAction } from "../datadog";
-import { getFlags } from "../flags";
+/**
+ * @file rateGuard.ts
+ * @description Guards against runaway or excessive API calls by rate-limiting requests and providing overflow strategies.
+ */
+import { addAction } from "../datadog.ts";
+import { getFlags } from "../flags.ts";
 
 /**
  * Strategy when limit is exceeded:

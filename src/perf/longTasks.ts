@@ -1,5 +1,9 @@
+/**
+ * @file longTasks.ts
+ * @description Observes long tasks in the browser main thread and reports them to Datadog RUM.
+ */
 import { datadogRum } from "@datadog/browser-rum";
-import { getUxConfig } from "../config";
+import { getUxConfig } from "../config.ts";
 
 let obs: PerformanceObserver | null = null;
 

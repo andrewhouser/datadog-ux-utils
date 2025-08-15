@@ -1,7 +1,11 @@
+/**
+ * @file offlineQueue.ts
+ * @description Buffers telemetry events in memory while offline and flushes them when connectivity returns. Does not persist to localStorage.
+ */
 import {
   addAction as realAddAction,
   addError as realAddError,
-} from "../datadog";
+} from "../datadog.ts";
 
 type QueuedAction = {
   type: "action" | "error";
@@ -17,9 +21,19 @@ let maxBuffered = 200;
 let installed = false;
 
 /**
- * Wraps addAction/addError so that they queue events when offline and flush on reconnect.
- * @param maxBufferedEvents - Max number of events to keep in memory while offline.
- * @returns A cleanup function to uninstall the queue wrapper.
+ * Installs the in-memory offline telemetry queue.
+ *
+ * Buffers telemetry events (actions/errors) in memory while offline and flushes them when connectivity returns. Does not persist to localStorage.
+ *
+ * @param maxBufferedEvents - Maximum number of events to keep in memory while offline.
+ * @returns Cleanup function to uninstall the queue wrapper and restore original telemetry functions.
+ *
+ * @example
+ * ```ts
+ * import { installTelemetryQueue } from "datadog-ux-utils/telemetry";
+ *
+ * installTelemetryQueue(300); // keep up to 300 events while offline
+ * ```
  */
 export function installTelemetryQueue(maxBufferedEvents = 200) {
   if (installed) return uninstall;
@@ -59,7 +73,11 @@ export function installTelemetryQueue(maxBufferedEvents = 200) {
   return uninstall;
 }
 
-/** Uninstalls the queue wrapper and restores original addAction/addError. */
+/**
+ * Uninstalls the queue wrapper and restores original addAction/addError functions.
+ *
+ * @returns void
+ */
 function uninstall() {
   if (!installed) return;
   installed = false;

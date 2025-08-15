@@ -10,7 +10,7 @@ vi.mock("../../config", () => ({ getUxConfig: () => testCfg }));
 
 async function importLongTasks() {
   vi.resetModules();
-  return await import("../longTasks");
+  return await import("../longTasks.ts");
 }
 
 describe("longTasks observer", () => {

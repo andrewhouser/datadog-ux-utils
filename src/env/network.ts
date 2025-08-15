@@ -1,4 +1,8 @@
-import { addAction, addGlobalContext } from "../datadog";
+/**
+ * @file network.ts
+ * @description Tracks and normalizes client network conditions, providing heuristics for constrained networks and reporting to telemetry.
+ */
+import { addAction, addGlobalContext } from "../datadog.ts";
 
 /**
  * Snapshot of client network conditions, normalized across browsers.

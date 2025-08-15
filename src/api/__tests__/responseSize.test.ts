@@ -12,7 +12,7 @@ let datadogRum: any;
 
 beforeEach(async () => {
   vi.resetModules();
-  ({ withResponseSizeCheck } = await import("../responseSize"));
+  ({ withResponseSizeCheck } = await import("../responseSize.ts"));
   ({ datadogRum } = await import("@datadog/browser-rum"));
   datadogRum.addAction.mockClear();
 });

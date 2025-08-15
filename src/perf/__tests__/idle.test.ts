@@ -7,7 +7,7 @@ vi.mock("../../datadog", () => ({
 
 async function importIdle() {
   vi.resetModules();
-  return await import("../idle");
+  return await import("../idle.ts");
 }
 
 describe("idle tracker", () => {

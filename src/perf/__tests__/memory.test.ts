@@ -7,7 +7,7 @@ vi.mock("../../datadog", () => ({
 
 async function importMemory() {
   vi.resetModules();
-  return await import("../memory");
+  return await import("../memory.ts");
 }
 
 describe("memory tracking", () => {

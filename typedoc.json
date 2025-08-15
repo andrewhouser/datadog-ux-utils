@@ -14,5 +14,14 @@
   "cleanOutputDir": true,
   "sort": ["source-order"],
   "categorizeByGroup": true,
-  "defaultCategory": "Other"
+  "defaultCategory": "Other",
+  "categoryOrder": [
+    "Config",
+    "API",
+    "Performance",
+    "React",
+    "Telemetry",
+    "UX",
+    "Other"
+  ]
 }

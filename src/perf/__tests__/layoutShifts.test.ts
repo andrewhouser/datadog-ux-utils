@@ -7,7 +7,7 @@ vi.mock("../../datadog", () => ({
 
 async function importLayoutShifts() {
   vi.resetModules();
-  return await import("../layoutShifts");
+  return await import("../layoutShifts.ts");
 }
 
 describe("layoutShifts", () => {

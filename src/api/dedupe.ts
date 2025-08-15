@@ -1,4 +1,8 @@
-import { addAction } from "../datadog";
+/**
+ * @file dedupe.ts
+ * @description Deduplicates identical async calls and optionally caches results for a short TTL, reducing redundant network traffic and improving efficiency.
+ */
+import { addAction } from "../datadog.ts";
 
 type State = "pending" | "cached";
 
@@ -14,7 +18,7 @@ const inFlight = new Map<string, Entry<any>>();
 /**
  * Telemetry options for deduplication reporting.
  */
-import { DedupeTelemetry, DedupeOptions } from "../types/types";
+import { DedupeTelemetry, DedupeOptions } from "../types/types.ts";
 
 /**
  * Deduplicate identical async calls and (optionally) cache results for a short TTL.

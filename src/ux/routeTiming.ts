@@ -1,10 +1,29 @@
-import { addAction } from "../datadog";
+/**
+ * @file routeTiming.ts
+ * @description Measures and reports route change timings for SPA navigation analytics and diagnostics.
+ */
+import { addAction } from "../datadog.ts";
 
-export function hookRouter(getRoute: () => string) {
+/**
+ * Hooks into SPA route changes and reports navigation timing and largest script chunk size.
+ *
+ * @param getRoute - Function returning the current route (e.g., pathname).
+ * @returns Unsubscribe function to clean up listeners and intervals.
+ *
+ * @example
+ * import { hookRouter } from './routeTiming';
+ * const unsubscribe = hookRouter(() => window.location.pathname);
+ * // ...
+ * unsubscribe(); // when cleaning up
+ */
+export function hookRouter(getRoute: () => string): () => void {
   let prev = getRoute();
   let t0 = performance.now();
   let largestKb = 0;
 
+  /**
+   * Tracks largest script resource loaded after route change.
+   */
   const onResources = () => {
     const res = performance.getEntriesByType(
       "resource"
@@ -19,6 +38,7 @@ export function hookRouter(getRoute: () => string) {
 
   const interval = setInterval(onResources, 200);
 
+  // Listen for route changes
   const unlisten = listen(() => {
     const next = getRoute();
     const dur = Math.round(performance.now() - t0);
@@ -35,6 +55,9 @@ export function hookRouter(getRoute: () => string) {
     largestKb = 0;
   });
 
+  /**
+   * Unsubscribe function to clean up listeners and intervals.
+   */
   return () => {
     unlisten();
     clearInterval(interval);
@@ -42,12 +65,20 @@ export function hookRouter(getRoute: () => string) {
 }
 
 /**
- * Minimal adapter so this stays router-agnostic.
- * Replace with your router’s real listener in your app glue code:
- *   import { createBrowserRouter } from 'react-router-dom';
- *   // use navigation events to call notify()
+ * Minimal router-agnostic listener adapter for navigation events.
+ * Replace with your router’s real listener in your app glue code.
+ *
+ * @param onChange - Callback invoked on route change.
+ * @returns Unsubscribe function to remove listeners and restore history.pushState.
+ *
+ * @example
+ * // In your app glue code:
+ * import { hookRouter } from './routeTiming';
+ * const unsubscribe = hookRouter(() => window.location.pathname);
+ * // ...
+ * unsubscribe(); // when cleaning up
  */
-function listen(onChange: () => void) {
+function listen(onChange: () => void): () => void {
   const notify = () => onChange();
   window.addEventListener("popstate", notify);
   const orig = history.pushState;

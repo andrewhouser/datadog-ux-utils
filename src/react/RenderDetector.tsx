@@ -1,11 +1,15 @@
-import {
-  Profiler,
+/**
+ * @file RenderDetector.tsx
+ * @description Detects React render hotspots by tracking commit frequency and render cost, reporting to telemetry when thresholds are exceeded.
+ */
+import React, {
+  Profiler as ReactProfiler,
   ProfilerOnRenderCallback,
   ReactNode,
   useMemo,
   useRef,
 } from "react";
-import { addAction } from "../datadog"; // Safe, no-op if your init gates telemetry
+import { addAction } from "../datadog.ts"; // Safe, no-op if your init gates telemetry
 
 /**
  * Options controlling when a subtree is considered a render hotspot.
@@ -128,6 +132,11 @@ export type RenderDetectorProps = {
    * The subtree to measure.
    */
   children: ReactNode;
+
+  /**
+   * (Test only) Optional Profiler callback spy.
+   */
+  __onRenderSpy?: ProfilerOnRenderCallback;
 };
 
 /**
@@ -190,7 +199,12 @@ export type RenderDetectorProps = {
  * </RenderDetector>
  * ```
  */
-export function RenderDetector({ id, options, children }: RenderDetectorProps) {
+export function RenderDetector({
+  id,
+  options,
+  children,
+  __onRenderSpy,
+}: RenderDetectorProps) {
   const opts = useMemo<Required<RenderDetectorOptions>>(
     () => ({
       enabled:
@@ -251,6 +265,17 @@ export function RenderDetector({ id, options, children }: RenderDetectorProps) {
     const buf = commitsRef.current;
     while (buf.length && buf[0].t < windowStart) buf.shift();
 
+    // Debug: log buffer and thresholds
+    if (process.env.NODE_ENV === "test") {
+      // eslint-disable-next-line no-console
+      console.log(
+        "[RenderDetector] buffer:",
+        buf.map((c) => c.t),
+        "commitsInWindow:",
+        buf.length
+      );
+    }
+
     // Bail early if not enough signal
     if (buf.length < opts.minCommits) return;
 
@@ -261,6 +286,15 @@ export function RenderDetector({ id, options, children }: RenderDetectorProps) {
     const seconds = opts.windowMs / 1000;
     const commitsPerSec = commitsInWindow / seconds;
     const renderMsPerSec = durationSum / seconds;
+
+    if (process.env.NODE_ENV === "test") {
+      // eslint-disable-next-line no-console
+      console.log("[RenderDetector] metrics:", {
+        commitsPerSec,
+        renderMsPerSec,
+        commitsInWindow,
+      });
+    }
 
     const reasons: HotspotInfo["reasons"] = [];
     if (commitsPerSec > opts.commitsPerSecThreshold)
@@ -273,6 +307,11 @@ export function RenderDetector({ id, options, children }: RenderDetectorProps) {
     const lastAt = lastReportAtRef.current;
     if (now - lastAt < opts.cooldownMs) return;
     lastReportAtRef.current = now;
+
+    if (process.env.NODE_ENV === "test") {
+      // eslint-disable-next-line no-console
+      console.log("[RenderDetector] HOTSPOT!", { reasons, now });
+    }
 
     const last = buf[buf.length - 1];
     const info: HotspotInfo = {
@@ -319,10 +358,11 @@ export function RenderDetector({ id, options, children }: RenderDetectorProps) {
     return <>{children}</>;
   }
 
+  const RP: any = ReactProfiler as any;
   return (
-    <Profiler id={id} onRender={onRender}>
+    <RP id={id} onRender={__onRenderSpy || onRender}>
       {children}
-    </Profiler>
+    </RP>
   );
 }
 

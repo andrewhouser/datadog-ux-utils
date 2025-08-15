@@ -15,7 +15,7 @@ vi.mock("@datadog/browser-rum", () => ({
   },
 }));
 
-import { ddFetch, timePromise } from "../ddFetch";
+import { ddFetch, timePromise } from "../ddFetch.ts";
 // bring in test config setter
 // @ts-ignore
 import { __setUxTestConfig } from "../../config";

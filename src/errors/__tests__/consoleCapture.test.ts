@@ -10,7 +10,7 @@ vi.mock("../../datadog", () => ({
 
 async function importConsoleCapture() {
   vi.resetModules();
-  return await import("../consoleCapture");
+  return await import("../consoleCapture.ts");
 }
 
 describe("consoleCapture", () => {

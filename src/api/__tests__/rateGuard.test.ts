@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { ApiRateGuard } from "../rateGuard";
+import { ApiRateGuard } from "../rateGuard.ts";
 
 vi.mock("../../flags", () => ({ getFlags: () => ({ guardEnabled: true }) }));
 

@@ -8,7 +8,7 @@
  * This uses `mousemove`, `keydown`, and visibility changes to detect activity.
  */
 
-import { safeAddAction } from "../datadog";
+import { safeAddAction } from "../datadog.ts";
 
 /**
  * Configuration options for idle tracking.

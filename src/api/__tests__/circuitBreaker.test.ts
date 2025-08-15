@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { wrapWithBreaker } from "../circuitBreaker";
+import { wrapWithBreaker } from "../circuitBreaker.ts";
 
 vi.mock("../datadog", () => ({ addAction: vi.fn() }));
 

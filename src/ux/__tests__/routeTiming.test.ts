@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { hookRouter } from "../routeTiming";
+import { hookRouter } from "../routeTiming.ts";
 
 const addActionMock = vi.fn();
 vi.mock("../../datadog", () => ({

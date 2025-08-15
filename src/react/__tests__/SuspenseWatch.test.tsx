@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React from "react";
 import { describe, it, expect, vi } from "vitest";
 import { createRoot } from "react-dom/client";
 import { act } from "@testing-library/react";
@@ -8,7 +8,7 @@ vi.mock("../../datadog", () => ({
   addAction: (...a: any[]) => addActionMock(...a),
 }));
 
-import { SuspenseWatch } from "../suspenseWatch";
+import { SuspenseWatch } from "../suspenseWatch.tsx";
 
 function createLazy(ms: number) {
   return React.lazy(
@@ -40,8 +40,10 @@ describe("suspenseWatch", () => {
       );
     });
 
-    await new Promise((r) => setTimeout(r, 80)); // surpass slow threshold
-    await new Promise((r) => setTimeout(r, 150)); // allow resolution
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 80));
+      await new Promise((r) => setTimeout(r, 150));
+    });
 
     const actions = addActionMock.mock.calls.map((c) => c[0]);
     expect(actions).toContain("suspense_slow");

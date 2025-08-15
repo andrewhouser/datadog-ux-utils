@@ -9,7 +9,7 @@ vi.mock("../../config", () => ({ getUxConfig: () => testCfg }));
 
 async function importResources() {
   vi.resetModules();
-  return await import("../resources");
+  return await import("../resources.ts");
 }
 
 describe("resources perf reporting", () => {

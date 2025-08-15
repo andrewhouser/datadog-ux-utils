@@ -1,5 +1,9 @@
+/**
+ * @file ddFetch.ts
+ * @description Wraps the fetch API to add Datadog RUM actions for slow API calls and errors.
+ */
 import { datadogRum } from "@datadog/browser-rum";
-import { getUxConfig } from "../config";
+import { getUxConfig } from "../config.ts";
 
 /**
  * Wraps the fetch API to add Datadog RUM actions for slow API calls and errors.

@@ -1,5 +1,9 @@
+/**
+ * @file resources.ts
+ * @description Reports large or slow-loading resources using the Performance API and sends summary events to Datadog RUM.
+ */
 import { datadogRum } from "@datadog/browser-rum";
-import { getUxConfig } from "../config";
+import { getUxConfig } from "../config.ts";
 
 /**
  * Capture oversized or slow-loading resources from the Performance API

@@ -1,5 +1,9 @@
+/**
+ * @file useGuardFetch.ts
+ * @description React hook for guarded fetch calls with rate limiting and auto-retry support.
+ */
 import { useCallback, useMemo, useRef, useEffect } from "react";
-import { ApiRateGuard, ApiRunawayBlockedError } from "../api/rateGuard";
+import { ApiRateGuard, ApiRunawayBlockedError } from "../api/rateGuard.ts";
 
 export type UseGuardedFetchOptions = {
   onBlocked?: (info: {

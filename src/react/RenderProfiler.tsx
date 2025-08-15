@@ -1,6 +1,10 @@
+/**
+ * @file RenderProfiler.tsx
+ * @description React Profiler wrapper that reports slow renders to Datadog RUM.
+ */
 import { Profiler, ProfilerOnRenderCallback, ReactNode } from "react";
 import { datadogRum } from "@datadog/browser-rum";
-import { getUxConfig } from "../config";
+import { getUxConfig } from "../config.ts";
 
 type Props = {
   id: string;

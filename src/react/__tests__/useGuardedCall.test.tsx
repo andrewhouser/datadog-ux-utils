@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { renderHook, act } from "@testing-library/react";
-import { useGuardedCall } from "../useGuardedCall";
+import { useGuardedCall } from "../useGuardedCall.ts";
 
 describe("useGuardedCall", () => {
   it("calls guard.guard and returns value", async () => {

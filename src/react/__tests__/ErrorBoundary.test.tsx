@@ -1,6 +1,6 @@
 import React from "react";
 import { describe, it, expect, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, act } from "@testing-library/react";
 
 const addErrorMock = vi.fn();
 vi.mock("@datadog/browser-rum", () => ({
@@ -12,7 +12,7 @@ vi.mock("@datadog/browser-rum", () => ({
 let testCfg: any = { appName: "TestApp" };
 vi.mock("../../config", () => ({ getUxConfig: () => testCfg }));
 
-import { ErrorBoundary } from "../ErrorBoundary";
+import { ErrorBoundary } from "../ErrorBoundary.tsx";
 
 function Boom() {
   throw new Error("nope");
@@ -20,15 +20,17 @@ function Boom() {
 }
 
 describe("ErrorBoundary", () => {
-  it("reports error and renders fallback", () => {
-    render(
-      <ErrorBoundary
-        fallback={<div data-testid="fb">FB</div>}
-        name="MyBoundary"
-      >
-        <Boom />
-      </ErrorBoundary>
-    );
+  it("reports error and renders fallback", async () => {
+    await act(async () => {
+      render(
+        <ErrorBoundary
+          fallback={<div data-testid="fb">FB</div>}
+          name="MyBoundary"
+        >
+          <Boom />
+        </ErrorBoundary>
+      );
+    });
     expect(screen.getByTestId("fb")).toBeInTheDocument();
     expect(addErrorMock).toHaveBeenCalledTimes(1);
     const call = addErrorMock.mock.calls[0];

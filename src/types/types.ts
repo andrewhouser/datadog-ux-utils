@@ -1,5 +1,4 @@
 // Centralized shared types for datadog-ux-utils
-
 export type UxConfig = {
   appName: string;
   service?: string;

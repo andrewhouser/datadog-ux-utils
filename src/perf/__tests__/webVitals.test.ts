@@ -19,7 +19,7 @@ vi.mock("web-vitals", () => ({
 
 async function importWebVitals() {
   vi.resetModules();
-  return await import("../webVitals");
+  return await import("../webVitals.ts");
 }
 
 describe("webVitals", () => {

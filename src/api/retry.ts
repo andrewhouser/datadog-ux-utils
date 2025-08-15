@@ -1,4 +1,8 @@
-import { addAction, addError } from "../datadog";
+/**
+ * @file retry.ts
+ * @description Adds retry logic to async operations and API calls, with exponential backoff and optional telemetry reporting.
+ */
+import { addAction, addError } from "../datadog.ts";
 
 export type RetryConfig = {
   /** Number of retries after the initial attempt. Default 3 */

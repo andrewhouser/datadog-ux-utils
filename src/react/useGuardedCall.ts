@@ -1,5 +1,9 @@
+/**
+ * @file useGuardedCall.ts
+ * @description React hook for guarded async calls with rate limiting and optional auto-retry.
+ */
 import { useCallback, useMemo } from "react";
-import { ApiRateGuard, ApiRunawayBlockedError } from "../api/rateGuard";
+import { ApiRateGuard, ApiRunawayBlockedError } from "../api/rateGuard.ts";
 
 export type UseGuardedCallOptions = {
   onBlocked?: (info: {

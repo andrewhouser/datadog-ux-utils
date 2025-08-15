@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { dedupe } from "../dedupe";
+import { dedupe } from "../dedupe.ts";
 
 vi.mock("../datadog", () => ({ addAction: vi.fn() }));
 

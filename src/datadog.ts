@@ -4,7 +4,7 @@ import {
   Context,
   ContextValue,
 } from "@datadog/browser-rum";
-import { getFlags, setFlags } from "./flags";
+import { getFlags, setFlags } from "./flags.ts";
 import type { LogsInitConfiguration } from "@datadog/browser-logs";
 // import { datadogLogs } from "@datadog/browser-logs"; // optional
 
@@ -153,7 +153,7 @@ export function addAction(
 export function setGlobalContext(ctx: Context) {
   if (!_isInitialized || !getFlags().telemetryEnabled) return;
   try {
-    datadogRum.setGlobalContext(ctx);
+    (datadogRum as any)?.setGlobalContext?.(ctx);
   } catch {}
 }
 
@@ -161,7 +161,7 @@ export function setGlobalContext(ctx: Context) {
 export function addGlobalContext(key: string, value: ContextValue) {
   if (!_isInitialized || !getFlags().telemetryEnabled) return;
   try {
-    datadogRum.setGlobalContext({ [key]: value });
+    (datadogRum as any)?.setGlobalContext?.({ [key]: value });
   } catch {}
 }
 
@@ -169,8 +169,8 @@ export function addGlobalContext(key: string, value: ContextValue) {
 export function setUser(user: User) {
   if (!_isInitialized || !getFlags().telemetryEnabled) return;
   try {
-    datadogRum.setUser(user);
-    // datadogLogs.setUser?.(user); // if logs enabled
+    (datadogRum as any)?.setUser?.(user);
+    // (datadogLogs as any)?.setUser?.(user); // if logs enabled
   } catch {}
 }
 

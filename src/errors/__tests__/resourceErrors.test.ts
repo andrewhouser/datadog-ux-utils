@@ -9,7 +9,7 @@ vi.mock("../../datadog", () => ({
 
 async function importResourceErrors() {
   vi.resetModules();
-  return await import("../resourceErrors");
+  return await import("../resourceErrors.ts");
 }
 
 describe("resourceErrors", () => {

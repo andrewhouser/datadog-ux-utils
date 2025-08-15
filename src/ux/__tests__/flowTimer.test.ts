@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { startFlow, cancelAllFlows } from "../flowTimer";
+import { startFlow, cancelAllFlows } from "../flowTimer.ts";
 
 const addActionMock = vi.fn();
 const addErrorMock = vi.fn();

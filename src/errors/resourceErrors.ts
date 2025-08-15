@@ -1,5 +1,9 @@
-import { addAction, addError } from "../datadog";
-import { ResourceErrorOptions } from "../types/types";
+/**
+ * @file resourceErrors.ts
+ * @description Captures failed resource loads and CSP violations, reporting them to telemetry with deduplication and rate limiting.
+ */
+import { addAction, addError } from "../datadog.ts";
+import { ResourceErrorOptions } from "../types/types.ts";
 
 type DedupeKey = string;
 

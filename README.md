@@ -1,53 +1,65 @@
 # Datadog UX Utils
 
-Utilities and React helpers for instrumenting real user experience (UX) in web apps with [Datadog RUM](https://www.datadoghq.com/product/real-user-monitoring/) + Logs. Provides:
+[![npm version](https://img.shields.io/npm/v/datadog-ux-utils.svg)](https://www.npmjs.com/package/datadog-ux-utils)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/datadog-ux-utils)](https://bundlephobia.com/package/datadog-ux-utils)
+[![docs](https://img.shields.io/badge/docs-live-blue)](https://andrewhouser.github.io/datadog-ux-utils/)
 
-- Lightweight performance & resource observers (long tasks, layout shifts, memory, large/slow resources, web vitals)
-- Guard rails for API usage (circuit breaker, retry, dedupe, rate limiting, response size & latency sampling)
-- React components & hooks (error boundary, render profiler / detector, Suspense watcher, guarded fetch/call)
-- UX flow & route timing measurement
-- Offline (in‑memory & persistent) telemetry queueing
-- Console & resource error capture (with de‑dupe & CSP support)
-
-Generated **TypeDoc API docs** live in the repo under [`/docs`](./docs) and can be browsed directly on GitHub: start at [`docs/index.html`](./docs/index.html). (When serving locally, run `npm run docs:serve`).
+**Datadog UX Utils** is a toolkit that helps you measure and improve user experience in web apps. It works with [Datadog RUM](https://www.datadoghq.com/product/real-user-monitoring/) and Logs, and provides simple tools for tracking performance, errors, and user flows.
 
 ---
 
-## Installation
+## What’s Included? (Easy Descriptions)
+
+- **Performance Trackers**: Watch for slow parts of your app, like long tasks, layout shifts, memory spikes, and slow resources. These tools help you spot what’s slowing down your site.
+- **API Safety Nets**: Prevent problems with your API calls—avoid too many requests, retry failures, and block repeated errors. These keep your app running smoothly even when things go wrong.
+- **React Helpers**: Catch errors, measure render speed, and watch for slow loading in your React components. These make your app more reliable and easier to debug.
+- **User Flow Timers**: Track how long users spend on key actions or pages. This helps you understand what users do and where they might get stuck.
+- **Offline Telemetry**: Save important events when users are offline and send them when they reconnect. You won’t lose data if someone’s internet drops.
+- **Error Catchers**: Collect errors from the browser console and failed resource loads. This helps you find and fix problems faster.
+
+---
+
+## Getting Started
+
+Install the package and its Datadog dependencies:
 
 ```bash
 npm install datadog-ux-utils @datadog/browser-rum @datadog/browser-logs
 ```
 
-Peer deps: `react` & `react-dom` (if you use the React helpers).
+If you use React, make sure you have `react` and `react-dom` installed.
 
 ---
 
-## Quick Start
+## Example Usage
 
-Initialize Datadog (simplified example) then wire desired utilities:
+**Initialize Datadog and start tracking:**
 
 ```ts
-import { initDatadogUx, startFlow, hookRouter } from "datadog-ux-utils";
+import { initDatadogUx, startFlow } from "datadog-ux-utils";
 
-initDatadogUx({
-  appName: "MyApp",
-  actionSampleRate: 50, // % sampling for non-critical actions
-  apiSlowMs: 500, // threshold for api_slow
-  renderSlowMs: 12, // threshold for render_slow
-  captureWebVitals: true,
-});
+initDatadogUx({ appName: "MyApp" });
 
-// Track a user flow
-const flow = startFlow("checkout", { items: 3 });
-// ... later
-flow.end({ orderId: "123" });
-
-// Route timing (pass a function that returns the current route path)
-const unhook = hookRouter(() => window.location.pathname);
+const flow = startFlow("checkout");
+// ...when done
+flow.end();
 ```
 
-React component usage:
+**React error boundary:**
+
+```tsx
+import {
+  ErrorBoundary,
+  RenderProfiler,
+  SuspenseWatch,
+} from "datadog-ux-utils/react";
+
+<ErrorBoundary name="AppRoot" fallback={<h1>Something broke.</h1>}>
+  <App />
+</ErrorBoundary>;
+```
+
+You can also combine React helpers:
 
 ```tsx
 import {
@@ -71,55 +83,93 @@ import {
 
 ---
 
+## Subpath Imports
+
+Import only what you need (tree-shake friendly):
+
+`api`, `perf`, `react`, `env`, `errors`, `telemetry`, `ux`
+
+Example:
+
+```ts
+import { ddFetch } from "datadog-ux-utils/api";
+import { registerWebVitals } from "datadog-ux-utils/perf";
+import { ErrorBoundary } from "datadog-ux-utils/react";
+import { networkInfo } from "datadog-ux-utils/env";
+import { captureConsole } from "datadog-ux-utils/errors";
+import { enqueueOffline } from "datadog-ux-utils/telemetry";
+import { startFlow } from "datadog-ux-utils/ux";
+```
+
+```tsx
+import { useComponentTelemetry } from "datadog-ux-utils/react";
+
+export function Button(
+  props: { variant?: string } & React.ButtonHTMLAttributes<HTMLButtonElement>
+) {
+  useComponentTelemetry("Button", { variant: props.variant });
+  return <button {...props} />;
+}
+```
+
+Custom sink example (send batch to your own endpoint instead of individual `addAction` calls):
+
+```ts
+initComponentTelemetry({
+  sampleRate: 0.5,
+  sink(batch) {
+    navigator.sendBeacon("/_telemetry/components", JSON.stringify(batch));
+  },
+});
+```
+
+---
+
 ## API Surface Overview
 
 ### API Utilities
 
-## Utilities Overview
-
-### API Utilities
-
-- **circuitBreaker.ts**: Protects API calls from repeated failures by implementing a circuit breaker pattern.
-- **ddFetch.ts**: Wraps fetch calls with Datadog RUM instrumentation and timing.
-- **dedupe.ts**: Deduplicates concurrent API requests to avoid redundant network traffic.
-- **rateGuard.ts**: Guards against runaway or excessive API calls by rate-limiting requests.
-- **responseSize.ts**: Monitors and checks the size of API responses to prevent large payloads.
-- **retry.ts**: Adds retry logic to API calls for improved reliability.
+- **circuitBreaker**: Prevents your app from making repeated failing API calls by temporarily blocking requests after too many errors.
+- **ddFetch**: Makes network requests and automatically tracks their performance and errors for you.
+- **dedupe**: Combines duplicate API requests so your app doesn’t send the same request multiple times.
+- **rateGuard**: Limits how often your app can make certain API calls, protecting against overload.
+- **responseSize**: Checks the size of data returned from APIs to help avoid slowdowns from large responses.
+- **retry**: Automatically tries failed API requests again, making your app more reliable.
 
 ### Error & Telemetry Utilities
 
-- **consoleCapture.ts**: Captures and deduplicates console errors/warnings/logs for telemetry.
-- **resourceErrors.ts**: Captures failed resource loads and CSP violations.
-- **offlineQueue.ts**: Buffers telemetry events while offline, flushes on reconnect.
-- **offlineQueue.persistent.ts**: Persists telemetry events to localStorage while offline.
+- **consoleCapture**: Collects errors and warnings from the browser’s console so you can see what went wrong.
+- **resourceErrors**: Tracks when images, scripts, or other resources fail to load.
+- **offlineQueue**: Saves important events when users are offline and sends them when they reconnect.
+- **offlineQueue.persistent**: Keeps offline events safe in local storage until they can be sent.
 
 ### Environment Utilities
 
-- **network.ts**: Tracks network conditions and exposes heuristics for constrained networks.
+- **network**: Watches your user’s network connection and lets you know if it’s slow or unreliable.
 
 ### Performance Utilities
 
-- **idle.ts**: Tracks user idle state and activity for session management and analytics.
-- **layoutShifts.ts**: Observes layout shifts to help diagnose visual instability (Cumulative Layout Shift).
-- **longTasks.ts**: Monitors long-running tasks in the browser main thread for responsiveness.
-- **memory.ts**: Tracks memory usage and trends in the browser.
-- **memoryPeak.ts**: Observes peak memory usage for diagnostics.
-- **resources.ts**: Reports large or slow-loading resources for optimization.
-- **webVitals.ts**: Registers and tracks core web vitals (LCP, FID, CLS, etc.).
+- **idle**: Detects when users are idle or active in your app.
+- **layoutShifts**: Spots unexpected movements on your pages that can annoy users.
+- **longTasks**: Finds slow operations that can make your app feel sluggish.
+- **memory**: Watches how much memory your app uses over time.
+- **memoryPeak**: Reports the highest memory usage for troubleshooting.
+- **resources**: Identifies big or slow files that may slow down your site.
+- **webVitals**: Tracks key web performance metrics like loading speed and responsiveness.
 
 ### React Utilities
 
-- **ErrorBoundary.tsx**: Provides a React error boundary for catching and reporting component errors.
-- **RenderProfiler.tsx**: Profiles React component render times using the React Profiler API.
-- **suspenseWatch.tsx**: Monitors Suspense boundaries for slow or unresolved states.
-- **useGuardedCall.ts**: React hook for guarded function calls with rate limiting.
-- **useGuardFetch.ts**: React hook for guarded fetch calls with rate limiting.
-- **RenderDetector.tsx**: Detects React render hotspots and reports when commit frequency or render cost exceeds thresholds.
+- **ErrorBoundary**: Catches errors in your React components and shows a fallback UI.
+- **RenderProfiler**: Measures how long your React components take to render.
+- **SuspenseWatch**: Alerts you when React Suspense boundaries are slow to resolve.
+- **useGuardedCall**: Lets you safely call functions in React, with built-in rate limiting.
+- **useGuardFetch**: Makes network requests in React with automatic safety checks.
+- **RenderDetector**: Finds React components that render too often or take too long.
 
 ### UX Utilities
 
-- **flowTimer.ts**: Tracks user flows and timing for analytics and diagnostics.
-- **routeTiming.ts**: Hooks into router changes to measure navigation timing and performance.
+- **flowTimer**: Measures how long users spend on important actions or pages.
+- **routeTiming**: Tracks how quickly users move between pages in your app.
 
 ---
 
@@ -166,9 +216,18 @@ npm install
 npm run build          # emits ESM + CJS into dist/
 npm test               # Vitest unit tests
 npm run test:coverage  # Coverage report
+npm run size           # Enforce bundle size limits (size-limit)
+```
+
+Individual tree‑shaken scenarios (see `size-limit/*`) include telemetry-only usage:
+
+```
+size-limit --why --limit 2 KB size-limit/only-componentTelemetry.js
 ```
 
 `prepublishOnly` runs typecheck, tests, build, and docs to ensure published artifacts are consistent.
+
+Automated releases use semantic-release (Angular commit convention) once `NPM_TOKEN` is configured.
 
 ---
 
@@ -221,3 +280,7 @@ Import and use the utilities as needed in your application. See individual files
 ## License
 
 MIT
+
+```
+
+```

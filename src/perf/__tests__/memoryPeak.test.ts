@@ -7,7 +7,7 @@ vi.mock("../../datadog", () => ({
 
 async function importPeak() {
   vi.resetModules();
-  return await import("../memoryPeak");
+  return await import("../memoryPeak.ts");
 }
 
 describe("memoryPeak", () => {

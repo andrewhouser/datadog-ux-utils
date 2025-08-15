@@ -9,12 +9,12 @@
  * and almost no runtime cost.
  */
 
-import { safeAddAction } from "../datadog";
+import { safeAddAction } from "../datadog.ts";
 import {
   MemoryPeak,
   MemoryPeakReportMode,
   MemoryPeakOptions,
-} from "../types/types";
+} from "../types/types.ts";
 
 /* ----------------------- state & defaults ----------------------- */
 

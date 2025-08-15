@@ -10,7 +10,7 @@ vi.mock("@datadog/browser-rum", () => ({
 let testCfg: any = { renderSlowMs: 5 };
 vi.mock("../../config", () => ({ getUxConfig: () => testCfg }));
 
-import { RenderProfiler } from "../RenderProfiler";
+import { RenderProfiler } from "../RenderProfiler.tsx";
 
 function SlowOnce() {
   const t = performance.now();

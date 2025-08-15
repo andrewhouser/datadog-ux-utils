@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { installPersistentTelemetryQueue } from "../offlineQueue.persistent";
+import { installPersistentTelemetryQueue } from "../offlineQueue.persistent.ts";
 
 // Mock localStorage (jsdom provides) but reset between tests
 let uninstallFns: Array<() => void> = [];

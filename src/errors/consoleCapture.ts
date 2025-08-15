@@ -1,5 +1,9 @@
-import { addAction, addError } from "../datadog";
-import { ConsoleCaptureOptions } from "../types/types";
+/**
+ * @file consoleCapture.ts
+ * @description Captures and deduplicates console errors, warnings, and logs for telemetry reporting and debugging.
+ */
+import { addAction, addError } from "../datadog.ts";
+import { ConsoleCaptureOptions } from "../types/types.ts";
 
 type Originals = {
   log: typeof console.log;
@@ -25,8 +29,25 @@ const DEFAULTS: Required<ConsoleCaptureOptions> = {
 };
 
 /**
- * Installs console capture. Call once at app startup after initDatadog().
- * Returns an uninstall function that restores the original console methods.
+ * Installs console capture to report errors, warnings, and logs to telemetry.
+ *
+ * Call once at app startup after `initDatadog()`. Returns an uninstall function that restores the original console methods.
+ *
+ * @param options - Console capture configuration (see {@link ConsoleCaptureOptions}).
+ * @returns Uninstall function to restore original console methods.
+ *
+ * @example
+ * ```ts
+ * import { captureConsole } from "datadog-ux-utils/errors";
+ *
+ * captureConsole({
+ *   errorRate: 25,
+ *   warnRate: 10,
+ *   logRate: 0,          // keep 0 to disable log capture
+ *   includeTrace: true,  // attach a short stack to warns/logs
+ *   captureInDev: false, // keep dev noise low
+ * });
+ * ```
  */
 export function captureConsole(options: ConsoleCaptureOptions = {}) {
   if (installed) return uninstall;
@@ -46,7 +67,18 @@ export function captureConsole(options: ConsoleCaptureOptions = {}) {
   return uninstall;
 }
 
-/** Restores original console methods and clears dedupe memory. */
+/**
+ * Restores original console methods and clears dedupe memory.
+ *
+ * @returns void
+ *
+ * @example
+ * ```ts
+ * const undo = captureConsole();
+ * // ...later
+ * undo(); // restores console methods
+ * ```
+ */
 export function uninstall() {
   if (!installed) return;
   installed = false;

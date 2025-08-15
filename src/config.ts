@@ -1,5 +1,9 @@
+/**
+ * @file config.ts
+ * @description Configuration and initialization for Datadog UX utilities and RUM integration.
+ */
 import { datadogRum } from "@datadog/browser-rum";
-import { UxConfig } from "./types/types";
+import { UxConfig } from "./types/types.ts";
 
 let _config: Required<UxConfig>;
 

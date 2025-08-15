@@ -1,5 +1,9 @@
-import { ReactNode, Suspense, useEffect, useRef } from "react";
-import { addAction, addError } from "../datadog";
+/**
+ * @file suspenseWatch.tsx
+ * @description React Suspense boundary wrapper that reports slow fallbacks and resolutions to telemetry.
+ */
+import { ReactNode, useEffect, useRef, Suspense } from "react";
+import { addAction, addError } from "../datadog.ts";
 
 /**
  * Options that control how SuspenseWatch reports and samples events.
@@ -302,8 +306,10 @@ export function SuspenseWatch({
     if (clearRef) cycleRef.current = null;
   }
 
+  // Cast Suspense to any to avoid TS JSX component constraint mismatch under current TS + React 19 types.
+  const S: any = Suspense as any;
   return (
-    <Suspense
+    <S
       fallback={
         <FallbackSentinel
           onMount={onFallbackMount}
@@ -316,7 +322,7 @@ export function SuspenseWatch({
       <ContentSentinel onMount={onContentMount} onUnmount={onContentUnmount}>
         {children}
       </ContentSentinel>
-    </Suspense>
+    </S>
   );
 }
 
