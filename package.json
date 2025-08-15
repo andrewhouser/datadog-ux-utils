@@ -1,6 +1,6 @@
 {
   "name": "datadog-ux-utils",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Datadog RUM focused UX & performance toolkit: API guards (retry, breaker, rate), React telemetry (error boundary, profiler, Suspense), web vitals & resource observers, offline queues.",
   "type": "module",
   "main": "./dist/index.js",
