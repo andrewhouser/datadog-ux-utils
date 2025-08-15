@@ -1,7 +1,6 @@
 # Datadog UX Utils
 
 [![npm version](https://img.shields.io/npm/v/datadog-ux-utils.svg)](https://www.npmjs.com/package/datadog-ux-utils)
-[![bundle size](https://img.shields.io/bundlephobia/minzip/datadog-ux-utils)](https://bundlephobia.com/package/datadog-ux-utils)
 [![docs](https://img.shields.io/badge/docs-live-blue)](https://andrewhouser.github.io/datadog-ux-utils/)
 
 **Datadog UX Utils** is a toolkit that helps you measure and improve user experience in web apps. It works with [Datadog RUM](https://www.datadoghq.com/product/real-user-monitoring/) and Logs, and provides simple tools for tracking performance, errors, and user flows.
